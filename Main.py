@@ -2,23 +2,27 @@
 letters = {'abcdefghijklmnopqrstuvwxyz'}
 
 def travelToPoint(x, y):
-	print(("\u001b[%s;%sH").format(y, x))
+	print(("\u001b[%s;%sf").format(str(y), str(x)))
 
 def startGame():
-	secretPhrase = str(input("Enter the secret phrase: "))
+	print("\u001b[8m",end='')
+	print("Enter the secret phrase: ", end='')
+	secretPhrase = str(input())
+	print("\u001b[m",end='')
 	guessedPhrase = " " * len(secretPhrase)
 
 	startingX = 4
 	while True:
 		# Clear screen
-		print("\u001b[2J")
+		print("\u001b[2J",end='')
 		# Travel to top left corner of screen
 		travelToPoint(startingX, 2)
 		# Turn on underscoring
 		for index in range(len(secretPhrase)):
+			print("\u001b[m ",end='')
 			# Don't put an underscore if there is a space
 			if secretPhrase[index] == " ":
-				print("\u001b[m ",end='')
+				print(" ",end='')
 			else:
 				# Print an underscore to represent the hidden letter
 				print("\u001b[4m",end='')
@@ -28,7 +32,7 @@ def startGame():
 					print(guessedPhrase[index], end = "")
 				else:
 					print(" ", end='')
-			
+			print(" ", end='')
 		print("\u001b[m",end='')
 		# Remove underlining because done
 		print("\u001b[m")
@@ -38,8 +42,9 @@ def startGame():
 			if secretPhrase[index] == letter:
 				# The letter has been guessed
 				tempText = list(guessedPhrase)
-				tempText.insert(index, letter);
+				tempText[index] = letter
 				guessedPhrase = "".join(tempText)
-
+		if guessedPhrase == secretPhrase:
+			print("You win!")
 # Start the game
 startGame()
