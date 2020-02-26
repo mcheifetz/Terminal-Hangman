@@ -3,6 +3,10 @@ from os import system, name
   
 # import sleep to show output for some time period 
 from time import sleep 
+
+#from win32com.client import Dispatch
+
+#textToSpeech = win32com.client.Dispatch("SAPI.SpVoice")
   
 # define our clear function 
 def clear(): 
@@ -14,12 +18,17 @@ def clear():
     # for mac and linux(here, os.name is 'posix') 
     else: 
         _ = system('clear') 
+
+def sAR(text):
+	# Say and return
+	#textToSpeech.Speak(text)
+	return text
   
   
 
 def startGame():
 	clear()
-	secretPhrase = list(str(input("Enter the secret phrase: ")))
+	secretPhrase = list(str(input(sAR("Enter the secret phrase: "))))
 	clear()
 	guessedPhrase = [" "] * len(secretPhrase)
 	lives = 10
@@ -27,6 +36,7 @@ def startGame():
 	while True:
 		# Writing the blank word
 		haveWon = True
+		print(sAR("You have " + str(lives) + " lives remaining"))
 		for index in range(len(secretPhrase)):
 			# Don't put an underscore if there's a space
 			if secretPhrase[index] == " ":
@@ -41,13 +51,14 @@ def startGame():
 					print(guessedPhrase[index], end = " ")
 		if haveWon:
 			print("")
-			print("You won!")
+			print(sAR("You won!"))
+			print(sAR("It took you " + str(count) + " tries to win!"))
 			break
 		print("")
 		print("")
 
 		# Ask for next letter
-		letter = str(input("Enter letter: "))
+		letter = str(input(sAR("Enter letter: ")))
 		hasLetterBeenFound = False
 		count = 0
 		for index in range(len(secretPhrase)):
@@ -55,21 +66,18 @@ def startGame():
 				count = count + 1
 				guessedPhrase[index] = letter
 				hasLetterBeenFound = True
-				if count == 1:
-					print("You have " + str(lives) + " lives remaining")
+				#if count == 1:
+					#print(sAR("You have " + str(lives) + " lives remaining"))
 					
-				
-		
 		# User didn't guess the right letter
 		if not hasLetterBeenFound:
 			lives = lives - 1
 			if lives == 0:
-				print("You literally have no life. You lost. What a loser")
+				print(sAR("You literally have no life. You lost. What a loser"))
 				break
-			print("Try a different letter")
-			print("You have " + str(lives) + " lives remaining")
-		
-		sleep(3) 
+			print(sAR("Try a different letter"))
+			print(sAR("You have " + str(lives) + " lives remaining"))
+		sleep(3)	
 		clear()
 
 	print("Finished")
